@@ -2,10 +2,13 @@
 document.addEventListener('DOMContentLoaded', () => {
     const navToggle = document.querySelector('.nav-toggle');
     const navbar = document.querySelector('.navbar');
+    const body = document.body;
     
     if (navToggle) {
         navToggle.addEventListener('click', () => {
             navbar.classList.toggle('active');
+            navToggle.classList.toggle('active');
+            body.style.overflow = navbar.classList.contains('active') ? 'hidden' : '';
         });
     }
 
@@ -13,11 +16,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav-link');
     navLinks.forEach(link => {
         link.addEventListener('click', () => {
-            // Close sidebar on mobile when link is clicked
+            // Close menu on mobile when link is clicked
             if (window.innerWidth <= 768) {
                 navbar.classList.remove('active');
+                navToggle.classList.remove('active');
+                body.style.overflow = '';
             }
         });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768 && navbar.classList.contains('active')) {
+            if (!navbar.contains(e.target) && !navToggle.contains(e.target)) {
+                navbar.classList.remove('active');
+                navToggle.classList.remove('active');
+                body.style.overflow = '';
+            }
+        }
     });
 
     // Smooth scrolling for anchor links
